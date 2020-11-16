@@ -1,0 +1,54 @@
+
+<!--criada a variável local #f para poder fazer as validações do formulário para submeter após todos os campos estarem preenchidos -->
+<!--o segundo parâmetro do formulário vinculamos o método onSubimite do componente quando o form for submetido-->
+<form #f="ngForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+        <label for="prioridade">Prioridade</label>
+        <!--#prioridade: variável local para  atribuir o elemento ngModel, assim podemos utilizar das flags valid e touched
+        para poder fazer as validações do campo para saber se ele já foi clicado.
+        [class-is-valid]: caso o campo não for preenchido (null, vazio ou undefined) atribuimos a classe is-invalid do bootstrap 
+        para que o compo fique estilizado em vermelho.
+        [(ngModel)]: informamos ao angular que o valor do atributo propriedade do lembrete armazanado no atributo propriedade
+        do componente deve'ra ser o mesmo exibido no campo do formulário (técnica chamada: two-way data binding), caso o valor 
+        deste campo não for definido então será atribuido o valor selecione colocado pelo ngValue.-->
+        <select
+          #prioridade="ngModel"
+          class="form-control"
+          [class.is-invalid]="!prioridade.valid && prioridade.touched"
+          id="prioridade"
+          name="prioridade"
+          [(ngModel)]="lembrete.prioridade"
+          required>
+          <option [ngValue]="undefined">Selecione...</option>
+          <option value="BAIXA">BAIXA</option>
+          <option value="MEDIA">MÉDIA</option>
+          <option value="ALTA">ALTA</option>
+        </select>
+        <!--utilizamos a verificação do campo não validado com o ngIf para colocar uma mensagem na tela.-->
+        <div *ngIf="!prioridade.valid && prioridade.touched" class="invalid-feedback">
+          Selecione o nível de prioridade do lembrete.
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="conteudo">Lembrete</label>
+        <!--[(ngModel)]: vincula o atributo conteudo do componente com o campo no formulário, possibilitando que eles sempre
+        estejam atualizados nas duas vias.
+        [#conteudo: variável local criada para validar os campos do formulário com as tags valid e touched
+        [class.is-invalid]: colocamos o estilo da classe is-invalid do bootstrap no vampo para quando estiver inválido
+        -->
+        <textarea
+          class="form-control"
+          id="conteudo"
+          rows="3"
+          placeholder="Seu lembrete..." name="conteudo"
+          [(ngModel)]="lembrete.conteudo"
+          #conteudo="ngModel"
+          [class.is-invalid]="!conteudo.valid && conteudo.touched"
+          required>
+        </textarea>
+        <div *ngIf="!conteudo.valid && conteudo.touched" class="text-danger">
+          Descreva o lembrete.
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Salvar</button>
+</form>
